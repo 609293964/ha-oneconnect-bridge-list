@@ -7,8 +7,10 @@
 
 
 
-| 设备名称  | HA / 实体 | 模拟产品 | 模板 `prodId` / 型号 | 可用功能 | 未映射、不可用或待确认 | 选择原因、必要调整和状态 |
-|---|---|---|---|---|---|---|
+<div style="overflow-x: auto;">
+
+| 设备名称 | HA / 实体 | 模拟产品 | 模板<br>`prodId` / 型号 | 可用功能 | 未映射、不可用<br>或待确认 | 选择原因、必要调整<br>和状态 |
+|:---|:---|:---|:---|:---|:---|:---|
 | [小米米家智能墙壁插座](https://home.miot-spec.com/p/zimi.plug.zncz01) | `zimi.plug.zncz01` | FSL 智能插座 | `2MFF` / `Z1-Z3B-101/ZK` | 开关、指示灯、功率 | 日/月用电量、电流异常报警、功率保护与充满断电未启用，卡片中电流电压无实体 | 插座品类相符；当前映射直接使用开关、指示灯和功率。 |
 | [智能窗帘电机 V1-Mesh 版](https://home.miot-spec.com/p/bean.curtain.ct01) | `bean.curtain.ct01` | H1 窗帘 | `2DCY` / `H1` | 开、关、停、开合百分比、手拉启动 | 窗帘高级设置与遥控器服务未绑定；`invert: false`，方向和真实行程仍需确认 |  |
 | [LS-M3 CURTAIN-Mesh](https://home.miot-spec.com/p/lonsam.curtain.ct05) | `lonsam.curtain.ct05` | H1 窗帘 | `2DCY` / `H1` | 开、关、停、百分比、手拉启动、反转、校准、故障 | 卷帘设置、场景配置、遥控器管理未接入 |  |
@@ -27,6 +29,8 @@
 | [松下智能吸顶灯](https://home.miot-spec.com/spec?type=urn%3Amiot-spec-v2%3Adevice%3Alight%3A0000A001%3Apmfbj-xsx340%3A2%3A0000C802)  | `light.pmfbj.light.xsx340` | 立达信护眼吸顶灯 | `2RAU` / `LC5S-G1-D50HM` | 开关、亮度、色温、6 项场景 | 通用倒计时和渐变未接入；“适悦光”等 effect 按语义映射到 2RAU 场景 | `2RDK`、`2RF1` 被 `batchBind 15013` 拒绝，恢复到可注册的 `2RAU`。当前映射 |
 | [米家智能直流变频落地扇 1X](https://home.miot-spec.com/p/dmaker.fan.p5c) | `dmaker.fan.p5c`；实体含 `P5C` | eachone 智能循环扇 | `2NHB` / `HF-HM-XHS-001` | 开关、12 档风速、摇头 | 指示灯、提示音、童锁未绑定；HA `percentage_step=25`，中间档可能被取整 | 12 档风速需要自定义百分比 |
 | 链路探针 | 虚拟链路探针，无实际设备 | 尊界 S800 Grand Design | `ZJ0V` | 链路探针 | 链路探针 | 用于验证子设备链路 |
+
+</div>
 
 
 ## 适配调整
