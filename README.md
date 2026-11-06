@@ -1,200 +1,30 @@
 # OneConnect Bridge 映射记录
 
- 记录 Home Assistant 实体通过 `oneconnect_bridge` 接入智慧生活后的设备映射结果。
-
+记录 Home Assistant 实体通过 `oneconnect_bridge` 接入智慧生活后的设备映射结果。
 
 ## 映射总表
 
+| 设备名称<br>HA / 实体 | 模拟产品<br>模板 `prodId` / 型号 | 可用功能 | 未映射、不可用<br>或待确认 | 选择原因、必要调整<br>和状态 |
+|---|---|---|---|---|
+| [小米米家智能墙壁插座](https://home.miot-spec.com/p/zimi.plug.zncz01)<br>`zimi.plug.zncz01` | FSL 智能插座<br>`2MFF` / `Z1-Z3B-101/ZK` | 开关、指示灯、功率 | 日/月用电量、<br>电流异常报警、功率保护<br>与充满断电未启用，<br>卡片中电流电压无实体 | 插座品类相符；<br>当前映射直接使用开关、<br>指示灯和功率。 |
+| [智能窗帘电机 <br>V1-Mesh 版](https://home.miot-spec.com/p/bean.curtain.ct01)<br>`bean.curtain.ct01` | H1 窗帘<br>`2DCY` / `H1` | 开、关、停、<br>开合百分比、手拉启动 | 窗帘高级设置与<br>遥控器服务未绑定；<br>`invert: false`，<br>方向和真实行程仍需确认 |  |
+| [LS-M3 CURTAIN-Mesh](https://home.miot-spec.com/p/lonsam.curtain.ct05)<br>`lonsam.curtain.ct05` | H1 窗帘<br>`2DCY` / `H1` | 开、关、停、<br>百分比、手拉启动、<br>反转、校准、故障 | 卷帘设置、场景配置、<br>遥控器管理未接入 |  |
+| [米家智能宠物喂食器 2](https://home.miot-spec.com/p/xiaomi.feeder.pi2001)<br>`xiaomi.feeder.pi2001` | Solo 宠物喂食器<br>`A3DV` / `P571` | 出粮、童锁、<br>余粮状态、设备状态 | 定时计划、出粮记录、<br>称重校准、故障、<br>干燥剂寿命、<br>电池电量未映射 | 现有 Profile 覆盖<br>核心喂食能力，<br>避免引入无关功能。<br>当前映射 |
+| 美的普通滚筒洗衣机<br>`TG100V87MIY` | 美的普通滚筒洗衣机<br>`A1PI` / `TG100Q81Y` | 电源、开始/暂停、<br>程序、运行状态、剩余时间 |  |  |
+| 美的燃气热水器<br>`JSQ30-Magic Pro` | 美的燃气热水器<br>`A1BR` / `JSQ34-RX9` | 电源、当前/目标温度、<br>状态、零冷水、进水温度 | 完整 HA 实体清单和<br>云端字段逐项控制仍待核实 | 品类和 Profile 能力<br>最接近。当前映射 |
+| [小米米家蓝牙温湿度计 2](https://home.miot-spec.com/p/miaomiaoce.sensor_ht.t2)<br>`miaomiaoce.sensor_ht.t2`；<br>HA 实体 <br>`miaomiaoce_t2_d99f` | LifeSmart 温湿度计<br>`21DJ` / `LS063WH` | 温度、湿度、电池 |  |  |
+| [领普温湿度传感器](https://home.miot-spec.com/p/linp.sensor_ht.ks2bb)<br>`linp.sensor_ht.ks2bb`；<br>商品型号 `KS2BB` | LifeSmart 温湿度计<br>`21DJ` / `LS063WH` | 温度、湿度、电池 | 按键无法集成映射 |  |
+| [米家风扇灯 42 英寸](https://home.miot-spec.com/p/xiaomi.light.cfan)<br>`xiaomi.light.cfan`；<br>实体含 <br>`xiaomi_cn_750352651_cfan` | eachone 智能风扇灯<br>`2NAL` / `HJ-HM-FSD-001` | 灯开关、亮度、色温、<br>风扇开关、6 档风速、<br>风类模式、6 项灯光模式 | 延时、上电状态、<br>凌动开关、勿扰、<br>自然风曲线、<br>遥控器管理未接入； | “用餐”“阅读”<br>需要自定义<br>用亮度/色温组合 |
+| [米家智能香氛机](https://home.miot-spec.com/p/xiaomi.diffuser.xw002)<br>`xiaomi.diffuser.xw002`；<br>`XW002` | 康美太香氛机<br>`173P` / `1522YN` | 总开关、香氛开关、<br>氛围灯开关 | 香氛浓度、出香时长、<br>氛围灯亮度/颜色、<br>自动出香、手动喷香、<br>电池状态未映射 | Mynt 模板 H5 持续白屏，<br>改用 `173P`；<br>三组开关注册<br>和同步成功。当前映射 |
+| [平头熊人体存在传感器<br>（顶装版）](https://home.miot-spec.com/p/090615.sensor_occupy.xw)<br>`090615.sensor_occupy.xw` | LifeSmart 人体存在传感器<br>`21DI` / `LS062WH` | 有人/无人、照度 | 探测距离、灵敏度、<br>生物检测、指示灯和<br>雷达负载开关未映射 | Xiaomi Home 对应实体<br>不可用，改用 Miot 中<br>可用的 occupancy 和 <br>illumination。当前映射 |
+| Sagewe F2s501-GB<br>Tuya 集成 | FSL 智能插座<br>`2MFF` / `Z1-Z3B-101/ZK` | 开关、电流、电压、<br>累计电量、瞬时功率 | HA 侧遥测已映射；<br>模板指示灯、童锁、<br>故障码、定时、`netInfo`、<br>`update` 未启用 | `electric` 和 `power` 同时<br>覆盖插座电量实体。<br>当前映射 |
+| [情景 Mesh 色温灯 V2S 系列](https://home.miot-spec.com/p/lemesh.light.wy0c15)<br>`lemesh.light.wy0c15`；<br>实体含 `wy0c15` | 松下智能灯带控制装置<br>`2OE9` / `LGC90822520QT` | 开关、亮度、色温、<br>场景模式 | 延时、渐变、上电状态、<br>凌动开关、超过 6 个<br>模式的 effect 未映射；<br>色温收敛到 2702–6493K | 灯带品类准确，<br>HA effect 可映射为 6 <br>个模式。当前映射 |
+| [情景 Lemesh 色温灯 Ultra](https://home.miot-spec.com/p/lemesh.light.wy0d02)<br>`lemesh.light.wy0d02`；<br>实体含 `wy0d02` | 松下智能灯带控制装置<br>`2OE9` / `LGC90822520QT` | 开关、亮度、色温、<br>场景模式 | 渐变、延时、默认状态、<br>节律照明、<br>遥控器管理未接入 | 与另一条灯带能力一致，<br>采用相同模板。当前映射 |
+| 情景Lemesh色温灯Ultra<br>HA 组合实体；<br>实际灯具型号待确认 | 松下智能筒射灯<br>`2OE7` / `HG9S352SQT` | 开关、亮度、色温、<br>场景模式 | 电视、阅读、呼吸、节拍等 <br>HA effect，以及倒计时、<br>渐变时长未映射 | 补齐 mapping 遗漏的 <br>`brightness`；2OE7 品类<br>和能力最准确。当前映射 |
+| [松下智能吸顶灯](https://home.miot-spec.com/spec?type=urn%3Amiot-spec-v2%3Adevice%3Alight%3A0000A001%3Apmfbj-xsx340%3A2%3A0000C802)<br>`light.pmfbj.light.xsx340` | 立达信护眼吸顶灯<br>`2RAU` / `LC5S-G1-D50HM` | 开关、亮度、色温、<br>6 项场景 | 通用倒计时和渐变未接入；<br>“适悦光”等 effect <br>按语义映射到 2RAU 场景 | `2RDK`、`2RF1` 被 <br>`batchBind 15013` 拒绝，<br>恢复到可注册的 `2RAU`。<br>当前映射 |
+| [米家智能直流变频落地扇 1X](https://home.miot-spec.com/p/dmaker.fan.p5c)<br>`dmaker.fan.p5c`；<br>实体含 `P5C` | eachone 智能循环扇<br>`2NHB` / `HF-HM-XHS-001` | 开关、12 档风速、摇头 | 指示灯、提示音、<br>童锁未绑定；HA <br>`percentage_step=25`，<br>中间档可能被取整 | 12 档风速需要自定义百分比 |
+| 链路探针<br>虚拟链路探针，无实际设备 | 尊界 S800 Grand Design<br>`ZJ0V` | 链路探针 | 链路探针 | 用于验证子设备链路 |
 
-
-<div style="overflow-x: auto;">
-<table width="1600" style="min-width: 1600px; table-layout: fixed;">
-<colgroup>
-<col width="14%" style="width: 14%;">
-<col width="18%" style="width: 18%;">
-<col width="13%" style="width: 13%;">
-<col width="14%" style="width: 14%;">
-<col width="16%" style="width: 16%;">
-<col width="17%" style="width: 17%;">
-<col width="28%" style="width: 28%;">
-</colgroup>
-<thead>
-<tr>
-<th>设备名称</th>
-<th>HA / 实体</th>
-<th>模拟产品</th>
-<th>模板<br><code>prodId</code> / 型号</th>
-<th>可用功能</th>
-<th>未映射、不可用<br>或待确认</th>
-<th>选择原因、必要调整<br>和状态</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="https://home.miot-spec.com/p/zimi.plug.zncz01">小米米家智能墙壁插座</a></td>
-<td><code>zimi.plug.zncz01</code></td>
-<td>FSL 智能插座</td>
-<td><code>2MFF</code> / <code>Z1-Z3B-101/ZK</code></td>
-<td>开关、指示灯、功率</td>
-<td>日/月用电量、电流异常报警、功率保护与充满断电未启用，卡片中电流电压无实体</td>
-<td>插座品类相符；当前映射直接使用开关、指示灯和功率。</td>
-</tr>
-<tr>
-<td><a href="https://home.miot-spec.com/p/bean.curtain.ct01">智能窗帘电机 V1-Mesh 版</a></td>
-<td><code>bean.curtain.ct01</code></td>
-<td>H1 窗帘</td>
-<td><code>2DCY</code> / <code>H1</code></td>
-<td>开、关、停、开合百分比、手拉启动</td>
-<td>窗帘高级设置与遥控器服务未绑定；<code>invert: false</code>，方向和真实行程仍需确认</td>
-<td></td>
-</tr>
-<tr>
-<td><a href="https://home.miot-spec.com/p/lonsam.curtain.ct05">LS-M3 CURTAIN-Mesh</a></td>
-<td><code>lonsam.curtain.ct05</code></td>
-<td>H1 窗帘</td>
-<td><code>2DCY</code> / <code>H1</code></td>
-<td>开、关、停、百分比、手拉启动、反转、校准、故障</td>
-<td>卷帘设置、场景配置、遥控器管理未接入</td>
-<td></td>
-</tr>
-<tr>
-<td><a href="https://home.miot-spec.com/p/xiaomi.feeder.pi2001">米家智能宠物喂食器 2</a></td>
-<td><code>xiaomi.feeder.pi2001</code></td>
-<td>Solo 宠物喂食器</td>
-<td><code>A3DV</code> / <code>P571</code></td>
-<td>出粮、童锁、余粮状态、设备状态</td>
-<td>定时计划、出粮记录、称重校准、故障、干燥剂寿命、电池电量未映射</td>
-<td>现有 Profile 覆盖核心喂食能力，避免引入无关功能。当前映射</td>
-</tr>
-<tr>
-<td>美的普通滚筒洗衣机</td>
-<td><code>TG100V87MIY</code></td>
-<td>美的普通滚筒洗衣机</td>
-<td><code>A1PI</code> / <code>TG100Q81Y</code></td>
-<td>电源、开始/暂停、程序、运行状态、剩余时间</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>美的燃气热水器</td>
-<td><code>JSQ30-Magic Pro</code></td>
-<td>美的燃气热水器</td>
-<td><code>A1BR</code> / <code>JSQ34-RX9</code></td>
-<td>电源、当前/目标温度、状态、零冷水、进水温度</td>
-<td>完整 HA 实体清单和云端字段逐项控制仍待核实</td>
-<td>品类和 Profile 能力最接近。当前映射</td>
-</tr>
-<tr>
-<td><a href="https://home.miot-spec.com/p/miaomiaoce.sensor_ht.t2">小米米家蓝牙温湿度计 2</a></td>
-<td><code>miaomiaoce.sensor_ht.t2</code>；HA 实体 <code>miaomiaoce_t2_d99f</code></td>
-<td>LifeSmart 温湿度计</td>
-<td><code>21DJ</code> / <code>LS063WH</code></td>
-<td>温度、湿度、电池</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><a href="https://home.miot-spec.com/p/linp.sensor_ht.ks2bb">领普温湿度传感器</a></td>
-<td><code>linp.sensor_ht.ks2bb</code>；商品型号 <code>KS2BB</code></td>
-<td>LifeSmart 温湿度计</td>
-<td><code>21DJ</code> / <code>LS063WH</code></td>
-<td>温度、湿度、电池</td>
-<td>按键无法集成映射</td>
-<td></td>
-</tr>
-<tr>
-<td><a href="https://home.miot-spec.com/p/xiaomi.light.cfan">米家风扇灯 42 英寸</a></td>
-<td><code>xiaomi.light.cfan</code>；实体含 <code>xiaomi_cn_750352651_cfan</code></td>
-<td>eachone 智能风扇灯</td>
-<td><code>2NAL</code> / <code>HJ-HM-FSD-001</code></td>
-<td>灯开关、亮度、色温、风扇开关、6 档风速、风类模式、6 项灯光模式</td>
-<td>延时、上电状态、凌动开关、勿扰、自然风曲线、遥控器管理未接入；</td>
-<td>“用餐”“阅读”需要自定义用亮度/色温组合</td>
-</tr>
-<tr>
-<td><a href="https://home.miot-spec.com/p/xiaomi.diffuser.xw002">米家智能香氛机</a></td>
-<td><code>xiaomi.diffuser.xw002</code>；<code>XW002</code></td>
-<td>康美太香氛机</td>
-<td><code>173P</code> / <code>1522YN</code></td>
-<td>总开关、香氛开关、氛围灯开关</td>
-<td>香氛浓度、出香时长、氛围灯亮度/颜色、自动出香、手动喷香、电池状态未映射</td>
-<td>Mynt 模板 H5 持续白屏，改用 <code>173P</code>；三组开关注册和同步成功。当前映射</td>
-</tr>
-<tr>
-<td><a href="https://home.miot-spec.com/p/090615.sensor_occupy.xw">平头熊人体存在传感器（顶装版）</a></td>
-<td><code>090615.sensor_occupy.xw</code></td>
-<td>LifeSmart 人体存在传感器</td>
-<td><code>21DI</code> / <code>LS062WH</code></td>
-<td>有人/无人、照度</td>
-<td>探测距离、灵敏度、生物检测、指示灯和雷达负载开关未映射</td>
-<td>Xiaomi Home 对应实体不可用，改用 Miot 中可用的 occupancy 和 illumination。当前映射</td>
-</tr>
-<tr>
-<td>Sagewe F2s501-GB</td>
-<td>Tuya 集成</td>
-<td>FSL 智能插座</td>
-<td><code>2MFF</code> / <code>Z1-Z3B-101/ZK</code></td>
-<td>开关、电流、电压、累计电量、瞬时功率</td>
-<td>HA 侧遥测已映射；模板指示灯、童锁、故障码、定时、<code>netInfo</code>、<code>update</code> 未启用</td>
-<td><code>electric</code> 和 <code>power</code> 同时覆盖插座电量实体。当前映射</td>
-</tr>
-<tr>
-<td><a href="https://home.miot-spec.com/p/lemesh.light.wy0c15">情景 Mesh 色温灯 V2S 系列</a></td>
-<td><code>lemesh.light.wy0c15</code>；实体含 <code>wy0c15</code></td>
-<td>松下智能灯带控制装置</td>
-<td><code>2OE9</code> / <code>LGC90822520QT</code></td>
-<td>开关、亮度、色温、场景模式</td>
-<td>延时、渐变、上电状态、凌动开关、超过 6 个模式的 effect 未映射；色温收敛到 2702–6493K</td>
-<td>灯带品类准确，HA effect 可映射为 6 个模式。当前映射</td>
-</tr>
-<tr>
-<td><a href="https://home.miot-spec.com/p/lemesh.light.wy0d02">情景 Lemesh 色温灯 Ultra</a></td>
-<td><code>lemesh.light.wy0d02</code>；实体含 <code>wy0d02</code></td>
-<td>松下智能灯带控制装置</td>
-<td><code>2OE9</code> / <code>LGC90822520QT</code></td>
-<td>开关、亮度、色温、场景模式</td>
-<td>渐变、延时、默认状态、节律照明、遥控器管理未接入</td>
-<td>与另一条灯带能力一致，采用相同模板。当前映射</td>
-</tr>
-<tr>
-<td>情景Lemesh色温灯Ultra</td>
-<td>HA 组合实体；实际灯具型号待确认</td>
-<td>松下智能筒射灯</td>
-<td><code>2OE7</code> / <code>HG9S352SQT</code></td>
-<td>开关、亮度、色温、场景模式</td>
-<td>电视、阅读、呼吸、节拍等 HA effect，以及倒计时、渐变时长未映射</td>
-<td>补齐 mapping 遗漏的 <code>brightness</code>；2OE7 品类和能力最准确。当前映射</td>
-</tr>
-<tr>
-<td><a href="https://home.miot-spec.com/spec?type=urn%3Amiot-spec-v2%3Adevice%3Alight%3A0000A001%3Apmfbj-xsx340%3A2%3A0000C802">松下智能吸顶灯</a></td>
-<td><code>light.pmfbj.light.xsx340</code></td>
-<td>立达信护眼吸顶灯</td>
-<td><code>2RAU</code> / <code>LC5S-G1-D50HM</code></td>
-<td>开关、亮度、色温、6 项场景</td>
-<td>通用倒计时和渐变未接入；“适悦光”等 effect 按语义映射到 2RAU 场景</td>
-<td><code>2RDK</code>、<code>2RF1</code> 被 <code>batchBind 15013</code> 拒绝，恢复到可注册的 <code>2RAU</code>。当前映射</td>
-</tr>
-<tr>
-<td><a href="https://home.miot-spec.com/p/dmaker.fan.p5c">米家智能直流变频落地扇 1X</a></td>
-<td><code>dmaker.fan.p5c</code>；实体含 <code>P5C</code></td>
-<td>eachone 智能循环扇</td>
-<td><code>2NHB</code> / <code>HF-HM-XHS-001</code></td>
-<td>开关、12 档风速、摇头</td>
-<td>指示灯、提示音、童锁未绑定；HA <code>percentage_step=25</code>，中间档可能被取整</td>
-<td>12 档风速需要自定义百分比</td>
-</tr>
-<tr>
-<td>链路探针</td>
-<td>虚拟链路探针，无实际设备</td>
-<td>尊界 S800 Grand Design</td>
-<td><code>ZJ0V</code></td>
-<td>链路探针</td>
-<td>链路探针</td>
-<td>用于验证子设备链路</td>
-</tr>
-</tbody>
-</table>
-</div>
 ## 适配调整
 
 | 适配项 | 调整内容 | 目的 |
